@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+   <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+  <link rel="stylesheet"  type="text/css"  href="{{url_for('static', filename='style.css')}}" >
+   <title>Login Catalog App</title>
+ </head>
+ <body>
+  <header>
+      <nav>
+         <div class="allcat">
+            <a  href="{{url_for('allCategories')}}" > Catalog App </a>
+         </div>
+         {% if 'email' in user %}
+           <div class="user">
+              <div>
+                <p>{{user['email']}}</p>
+                <a href="{{url_for('gdisconnect')}}">
+                  <button class="btn_logout">logout</button>
+                </a>
+              </div>
+           </div>
+         {% else %}
+           <div id="signinButton">
+              <span class="g-signin"
+               data-scope="openid email"
+               data-clientid="113874996296-i0f9fg64t5g31aa26nmkmtp73kv8874e.apps.googleusercontent.com"
+               data-redirecturi="postmessage"
+               data-accesstype="offline"
+               data-cookiepolicy="single_host_origin"
+               data-callback="signInCallback"
+               data-approvalprompt="force">
+              </span>
+            </div>
+         {% endif %}
+       </nav>
+    </header>
+
+
+    <main class="box-shadow">
+      <div class="categories">
+        <h1>Categories</h1>
+          <ul>
+            {%for cat in categories %}
+            <li>
+              <a href="{{url_for('itemsByCategory', cat_id=cat.id)}}">{{ cat.name }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+      </div>
+      <div class="items">
+        <h1>Latest Item</h1>
+        <ul>
+              {%for item in items %}
+              {%for cat in categories %}
+              {% if item.category_id ==  cat.id %}
+              <li>
+                <a href="{{url_for('getItem', cat_id=item.category_id, item_id=item.id)}}" >
+                {{ item.name }} <span style="color:#AAA"> ({{ cat.name }})</span>
+                </a>
+              </li>
+              {% endif %}
+              {% endfor %}
+              {% endfor %}
+              </ul>
+        </div>
+    </main>
+
+    <script>
+      function signInCallback(authResult) {
+        if (authResult['code']) {
+          $('#signinButton').attr('style', 'display: none');
+          $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{STATE}}',
+            processData: false,
+            data: authResult['code'],
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+            if (result) {
+              $('#result').html('<div class="content">Login Successful!</br>'+result + '</br> Redirecting...</div>')
+              window.location.href = "/catalog/";
+            }
+            else if (authResult['error']) {
+              console.log('There was an error: ' + authResult['error']);}}
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

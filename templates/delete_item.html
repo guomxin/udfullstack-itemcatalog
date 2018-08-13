@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+   <link rel="stylesheet"  type="text/css"  href="{{url_for('static', filename='style.css')}}" >
+   <title> Delete {{ item.name }} </title>
+
+ </head>
+ <body>
+    <header>
+    <nav>
+       <div class="allcat">
+          <a  href="{{url_for('allCategories')}}" > Catalog App </a>
+       </div>
+       {% if 'email' in user %}
+         <div class="user">
+            <div>
+              <p>{{user['email']}}</p>
+              <a href="{{url_for('gdisconnect')}}">
+                <button class="btn_logout">logout</button>
+              </a>
+            </div>
+         </div>
+       {% else %}
+         <div id="login">
+           <a href="{{url_for('allCategories')}}">
+              <button class="btn_login">login</button>
+           </a>
+         </div>
+       {% endif %}
+     </nav>
+  </header>
+     <main class="box-shadow text-center d-block" >
+        <h1 class="title_name">
+        Are you sure you want to delete :
+         <span style="color:red">{{ item.name }}</span>
+         </h1>
+          <form action="{{url_for('deleteItem',cat_id=item.category_id, item_id=item.id)}}" method="POST">
+  	         <input type="submit" value="Delete" class="btn_delete">
+             <a href="{{ url_for('getItem',cat_id=item.category_id,item_id=item.id) }}">
+               <button class="btn_login" type="button">Cancel</button>
+             </a>
+          </form>
+     </main>
+ </body>
+
+</html>
