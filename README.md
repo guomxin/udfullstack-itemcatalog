@@ -31,9 +31,9 @@ To get Google login working there are a few additional steps:
 9. Rename JSON file to client_secrets.json
 
 # JSON Endpoints
-Categories JSON: `/api/catalog/JSON`
-- Get all categories
-Category Items JSON: `/api/catalog/<int:category_id>/items/JSON/`
-- Get all items for a specific category
-Item JSON: `/api/catalog/item/<int:item_id>/JSON/`
-- Get a specific item
+- Categories JSON: `/api/catalog/JSON`
+  <br>Get all categories
+- Category Items JSON: `/api/catalog/<int:category_id>/items/JSON/`
+  <br>Get all items for a specific category
+- Item JSON: `/api/catalog/item/<int:item_id>/JSON/`
+  <br>Get a specific item
