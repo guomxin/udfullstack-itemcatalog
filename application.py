@@ -101,7 +101,6 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     code = request.data
-    """
     try:
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -150,12 +149,6 @@ def gconnect():
     data = answer.json()
     login_session['name'] = data['name']
     login_session['email'] = data['email']
-    """
-    login_session['access_token'] = 'willbedeleted'
-    login_session['gplus_id'] = 'willbedeleted'
-    login_session['name'] = 'Guomao Xin'
-    login_session['email'] = 'catty.xin@gmail.com' 
-    
     
     # check if user in database or add it
     login_session['user_id'] = get_user_by_session(login_session).id
@@ -170,7 +163,6 @@ def gconnect():
 # Disconnect
 @app.route('/gdisconnect')
 def gdisconnect():
-    """
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -195,11 +187,6 @@ def gdisconnect():
             json.dumps('Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    """
-    del login_session['access_token']
-    del login_session['gplus_id']
-    del login_session['name']
-    del login_session['email']
     response = make_response(json.dumps('Successfully disconnected.'), 200)
     response.headers['Content-Type'] = 'application/json'
     return redirect('/')
